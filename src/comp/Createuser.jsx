@@ -32,7 +32,6 @@ export default function Createuser() {
   function handelemail(e) {
     e.preventDefault();
     setLoading(true);
-    console.log(email)
     const otp = Math.round(Math.random() * 10000);
     axios.post("https://authentication-lisz.onrender.com/create",{email,otp})  
       .then((result) => {
