@@ -21,7 +21,7 @@ export default function Login() {
     setLoading(true);
 
     const otp = Math.round(Math.random() * (9999 - 1000) + 1000).toString();
-    console.log(otp);
+    
     otpvalue = otp;
     console.log(otp)
     axios
