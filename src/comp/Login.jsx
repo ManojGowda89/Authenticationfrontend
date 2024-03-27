@@ -23,7 +23,7 @@ export default function Login() {
     const otp = Math.round(Math.random() * (9999 - 1000) + 1000).toString();
     
     otpvalue = otp;
-    console.log(otp)
+    
     axios
       .post("https://authentication-lisz.onrender.com/login", {
         email,
