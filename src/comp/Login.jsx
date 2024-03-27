@@ -142,7 +142,7 @@ export default function Login() {
 
             <div>
             <form onSubmit={handleOtp}>
-              <h1>{res ? res : "OTP Verification"}</h1>
+              <h1>OTP Verification</h1>
               <div className="mb-3">
                 <input
                   type="text"
