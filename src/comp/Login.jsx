@@ -3,11 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { encrypt } from "n-krypta";
 import Loading from "./Loading";
+
+let otpvalue =""
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [res, setRes] = useState("");
+  const [login,setLogin] = useState(true);
+  const [showotp,getotp] = useState(false);
+  const [condion,setcondition] = useState(true);
 
   const Navigate = useNavigate();
 
@@ -15,15 +20,20 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
 
+    const otp = Math.round(Math.random() * (9999 - 1000) + 1000).toString();
+    console.log(otp);
+    otpvalue = otp;
+    console.log(otp)
     axios
       .post("https://authentication-lisz.onrender.com/login", {
         email,
         password,
+        otp
       })
       .then((result) => {
         if (result.data === "success") {
-            axios.get("http://localhost:3000/generatetoken").then((result)=>Antentication(result.data)).catch((error)=>{console.log(error)})
-         
+            axios.get("https://authentication-lisz.onrender.com/generatetoken").then((result)=>Antentication(result.data)).catch((error)=>{console.log(error)})
+           
           
         }
 
@@ -40,21 +50,42 @@ export default function Login() {
     axios
       .put("https://authentication-lisz.onrender.com/token", { email, jwt: x })
       .catch((error) => {
-        console.log(error);
+        alert("Token not generated"+error)
+        window.location.reload()
       });
 
     setTimeout(() => {
       setLoading(false);
-    Navigate("/dashboard");
-    }, 2000);
-  }
+       setLogin(false)
+      getotp(true)
+    }, 1000);
+  } 
+  
+  function getuserotp(e){
 
+    if(otpvalue== e.target.value){
+      setcondition(false);
+    }
+    else{
+      setcondition(true);
+    }
+
+  }
+  function handleOtp(e){
+    e.preventDefault();
+    Navigate("/dashboard");
+  }
   if (loading) {
     return <Loading />;
   }
   return (
+
+    
+
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
       <div className="w-50 bg-white rounded p-3">
+      { login && (
+      <div>
         <h1>{res ? res : "Login"}</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-3">
@@ -102,6 +133,43 @@ export default function Login() {
             forgotpassword
           </Link>
         </div>
+        </div>
+      )
+      }
+        { 
+          showotp && (
+            <div>
+
+            <div>
+            <form onSubmit={handleOtp}>
+              <h1>{res ? res : "OTP Verification"}</h1>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputUsername"
+                  onChange={getuserotp}
+                  placeholder="Enter 4 digit OTP"
+                  required
+                />
+              </div>
+              <button type="submit" disabled={condion} className="btn btn-success">
+                Verify OTP
+              </button>{" "}
+              <button
+                type="button"
+                onClick={handleLogin}
+                className="btn btn-danger"
+              >
+                Resend OTP
+              </button>
+            </form>
+          </div>
+
+            </div>
+          )
+
+        }
       </div>
     </div>
   );
