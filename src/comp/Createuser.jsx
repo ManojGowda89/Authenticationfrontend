@@ -39,6 +39,7 @@ export default function Createuser() {
           
          
           OtpAtantiction(otp);
+          console.clear()
         } else {
          setTimeout(() => {
           setLoading(false);
@@ -46,7 +47,9 @@ export default function Createuser() {
          }, 500);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {console.log(error)
+        console.clear()
+      });
   }
 
   function OtpAtantiction(x) {
@@ -114,7 +117,9 @@ function handleUserRegistration(e){
    setTimeout(() => {
      setLoading(false);
      alert(result.data);
+     console.clear()
      Navigate("/")
+     console.clear()
    }, 500);
 
  }).catch((err)=>alert(err.message));

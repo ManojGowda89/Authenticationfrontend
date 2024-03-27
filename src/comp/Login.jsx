@@ -33,7 +33,7 @@ export default function Login() {
       .then((result) => {
         if (result.data === "success") {
             axios.get("https://authentication-lisz.onrender.com/generatetoken").then((result)=>Antentication(result.data)).catch((error)=>{console.log(error)})
-           
+            console.clear()
           
         }
 
@@ -42,7 +42,10 @@ export default function Login() {
           setRes(result.data);
         }, 1000);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err)
+        console.clear()
+      });
   }
   async function Antentication(x) { 
     sessionStorage.setItem("1", encrypt(email, x));
@@ -51,6 +54,7 @@ export default function Login() {
       .put("https://authentication-lisz.onrender.com/token", { email, jwt: x })
       .catch((error) => {
         alert("Token not generated"+error)
+        console.clear()
         window.location.reload()
       });
 
@@ -74,6 +78,7 @@ export default function Login() {
   function handleOtp(e){
     e.preventDefault();
     Navigate("/dashboard");
+    console.clear()
   }
   if (loading) {
     return <Loading />;

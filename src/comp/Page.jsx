@@ -1,21 +1,52 @@
-
-import {Link} from 'react-router-dom';
-
-
-
-
-
-
+import  { useState, useEffect } from "react";
+import {  useNavigate } from "react-router-dom";
 
 export default function PageNotFound() {
+  const [time, setTime] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const redirectTimeout = setTimeout(() => {
+      setTime(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    }, 5000);
+
+    return () => clearTimeout(redirectTimeout);
+  }, [navigate]);
+
+
+  
+  const styles = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "#0D6EFD",
+    color: "white",
+    fontSize: "25px",
+  };
+
+  const blinkStyle = {
+    animation: time ? "blink-animation 1s step-start infinite" : "none",
+  };
   
 
   return (
-    <div className="container text-center">
-      <h1 className="display-4">404</h1>
-      <p className="lead">Page Not Found</p>
-      <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable,</p>
-      <Link to="/">Go back home</Link>
+    <div style={styles}>
+      {time ? (
+        <>
+          Redirecting to Home Page{" "}
+          <span style={blinkStyle}>......</span> 
+        </>
+      ) : (
+        <center>
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </center>
+      )}
     </div>
   );
 }
